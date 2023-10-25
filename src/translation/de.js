@@ -33,15 +33,15 @@ module.exports = {
         },
         sexualDrive: {
             label: 'Sexualtrieb',
-            left: 'Asexuell',
+            left: 'Kein',
             middle: 'Regelmäßig',
-            right: 'Hypersexuell',
+            right: 'Hoch',
         },
         romanticDesire: {
             label: 'Romantische Wünsche',
-            left: 'Aromantisch',
-            middle: 'Interessiert',
-            right: 'Hoffnungslos romantisch',
+            left: 'Keine',
+            middle: 'Regelmäßige',
+            right: 'Hohe',
         },
         relationshipAttitude: {
             label: 'Beziehungstyp',

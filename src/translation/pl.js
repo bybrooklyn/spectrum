@@ -38,15 +38,15 @@ module.exports = {
         },
         sexualDrive: {
             label: 'Pociąg seksualny',
-            left: 'Aseksualność',
+            left: 'Brak',
             middle: 'Przeciętny',
-            right: 'Hiperseksualność',
+            right: 'Wysoki',
         },
         romanticDesire: {
             label: 'Pociąg romantyczny',
-            left: 'Aromantyczność',
-            middle: 'Zaintetesowany',
-            right: 'Niepoprawny Romantyzm',
+            left: 'Brak',
+            middle: 'Przeciętny',
+            right: 'Wysoki',
         },
         relationshipAttitude: {
             label: 'Postawa w związku',
