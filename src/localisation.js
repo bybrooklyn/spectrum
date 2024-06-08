@@ -10,11 +10,13 @@ import {getQueryVariable} from "./helpers";
 import en from './translation/en';
 import pl from './translation/pl';
 import de from "./translation/de";
+import ar from "./translation/ar";
 
 export const locales = {
     'en': en,
     'pl': pl,
     'de': de,
+    'ar': ar,
 }
 
 let currentLocaleMemoise = null;

@@ -52,7 +52,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Open+Sans&display=swap" rel="stylesheet">
 </svelte:head>
 
-<div id="layout">
+<div id="layout" dir={t('rtl') ? 'rtl' : 'ltr'}>
     <Nav {segment}/>
 
     <main>
