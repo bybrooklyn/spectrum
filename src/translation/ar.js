@@ -27,10 +27,10 @@ module.exports = {
             right: 'فرط أنثوي',
         },
         sexualOrientation: {
-            label: 'Sexual orientation',
-            left: 'Straight',
-            middle: 'Bi / Pan',
-            right: 'Gay',
+            label: 'التوجه الجنسي',
+            left: 'محب للجنس الآخر',
+            middle: 'ما بين',
+            right: 'مثلي الجنس',
         },
         sexualDrive: {
             label: 'الرغبة الجنسية',
