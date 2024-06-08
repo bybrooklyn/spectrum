@@ -62,7 +62,7 @@
                 text-align: center;
             }
             &:last-child {
-                text-align: right;
+                text-align: end;
             }
         }
     }

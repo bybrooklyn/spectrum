@@ -56,7 +56,7 @@
                 text-align: center;
             }
             &:last-child {
-                text-align: right;
+                text-align: end;
             }
         }
     }
@@ -70,13 +70,13 @@
 
         > input, button, .btn {
             &:not(:first-child) {
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
+                border-start-start-radius: 0;
+                border-end-start-radius: 0;
                 border-left: 0;
             }
             &:not(:last-child) {
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
+                border-start-end-radius: 0;
+                border-end-end-radius: 0;
             }
         }
     }
@@ -84,7 +84,7 @@
     .btn-clear {
         background: transparent;
         padding: 0;
-        float: right;
+        float: end;
         display: inline-block;
         cursor: pointer;
         border: none;

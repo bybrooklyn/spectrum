@@ -84,7 +84,7 @@
             padding-top: .5rem;
             padding-bottom: .5rem;
             margin-top: 1rem;
-            float: right;
+            float: end;
             font-size: 14px;
         }
         .menu {
