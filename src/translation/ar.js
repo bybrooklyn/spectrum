@@ -12,6 +12,10 @@ module.exports = {
         attribution: 'صُنع بالـ💜 مِن قِبَل Andrea Vos',
         support: 'اشتري لي البيرة',
     },
+    translation: {
+        attribution:'مُترجَمة من قِبَل',
+        name: 'متطوع',
+    },
     source: 'الشفرة المصدرية',
     axes: {
         genderIdentity: {

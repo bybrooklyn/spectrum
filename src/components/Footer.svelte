@@ -13,10 +13,15 @@
                 </li>
                 {#if t('translation.attribution')}
                     <li>
-                        <a href={t('translation.link')} target="_blank" rel="noopener">
+                        {#if t('translation.link')}
+                            <a href={t('translation.link')} target="_blank" rel="noopener">
+                                ✍️ {t('translation.attribution')}
+                                {t('translation.name')}
+                            </a>
+                        {:else}
                             ✍️ {t('translation.attribution')}:
                             {t('translation.name')}
-                        </a>
+                        {/if}
                     </li>
                 {/if}
                 <li>

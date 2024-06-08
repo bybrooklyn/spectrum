@@ -11,6 +11,11 @@ module.exports = {
         attribution: 'Gemacht mit 💜 von Andrea Vos',
         support: 'Spendiere mir ein Bier',
     },
+    translation: {
+        attribution: 'Übersetzt von',
+        name: 'Feuerhamster',
+        link: 'https://gitlab.com/feuerhamster',
+    },
     source: 'Quellcode',
     axes: {
         genderIdentity: {

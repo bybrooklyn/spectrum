@@ -12,7 +12,7 @@ module.exports = {
         support: 'Postaw mi piwo',
     },
     translation: {
-        attribution: 'Polskie tłumaczenie',
+        attribution: 'Polskie tłumaczenie:',
         name: 'Avis Drożniak',
         link: 'https://zaimki.pl/@avis',
     },
