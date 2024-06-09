@@ -11,6 +11,11 @@ module.exports = {
 			attribution: 'Feito com 💜 por Andrea Vos',
 			support: 'Me pague uma cerveja',
 	},
+	translation: {
+		attribution: 'Traduzido por',
+		name: 'Diogo de Souza',
+		link: 'https://gitlab.com/sozua',
+	},
 	source: 'Código fonte',
 	axes: {
 			genderIdentity: {
