@@ -77,7 +77,7 @@ module.exports = {
 			cake: 'Bolo de Camadas de Atração',
 	},
 	disclaimer: {
-    header: 'Aviso legal:',
+    header: 'Aviso:',
     author: 'Não sou o autor do conceito original desses eixos. ' +
             'Eles estavam circulando online na forma de uma imagem sem marca d\'água ' +
             '– tornando praticamente impossível encontrar o autor. ' +
