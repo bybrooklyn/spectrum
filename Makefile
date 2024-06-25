@@ -1,9 +1,8 @@
 install:
-	yarn
+	pnpm install
 
 run: install
-	yarn dev
+	pnpm run dev
 
 deploy: install
-	yarn build
-	sudo supervisorctl restart spectrum
+	pnpm run build
