@@ -11,12 +11,14 @@ import en from './translation/en';
 import pl from './translation/pl';
 import de from "./translation/de";
 import ar from "./translation/ar";
+import pt from './translation/pt';
 
 export const locales = {
     'en': en,
     'pl': pl,
     'de': de,
     'ar': ar,
+    'pt': pt,
 }
 
 let currentLocaleMemoise = null;
