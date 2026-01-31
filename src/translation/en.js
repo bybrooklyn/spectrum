@@ -15,9 +15,9 @@ module.exports = {
     axes: {
         genderIdentity: {
             label: 'Gender identity',
-            left: 'Male',
+            left: 'Man',
             middle: 'Nonbinary',
-            right: 'Female',
+            right: 'Woman',
         },
         genderExpression: {
             label: 'Gender expression',
@@ -79,7 +79,7 @@ module.exports = {
             'I just made an interactive version of it, with a few adjustments.',
         issues: 'I\'m aware that this representation of gender & sexuality is not perfect – but none is! ' +
             'Humans are more complex than just a few axes!',
-        examples: 'Yes, us nonbinary folks aren\'t necessarily <em>in between</em> “male” and “female”, ' +
+        examples: 'Yes, us nonbinary folks aren\'t necessarily <em>in between</em> “men” and “women”, ' +
             'yes, lumping bisexuality and pansexuality together is not ideal, etc. etc. etc. ' +
             'But it\'s an approximation. ' +
             'If you come up with a better one, I\'d gladly make an app for it 😉',
