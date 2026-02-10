@@ -2,10 +2,19 @@
 
 body {
 	margin: 0;
-	font-family: 'Open Sans', 'Noto Color Emoji', sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+	font-family: 'Open Sans', var(--emoji-font), sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 	font-size: 14px;
 	line-height: 1.5;
 	color: #333;
+}
+
+:root {
+	--emoji-font: "Noto Color Emoji";
+}
+@supports (font: -apple-system-body) {
+	:root {
+		--emoji-font: "Apple Color Emoji";
+	}
 }
 
 h1, h2, h3, h4, h5, h6 {
