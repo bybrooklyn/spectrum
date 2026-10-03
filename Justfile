@@ -13,6 +13,10 @@ preview: build
 serve: build
 	bun server.ts
 
+deploy:
+	ADAPTER=cloudflare bun run build
+	bunx wrangler deploy
+
 check: install
 	bun run check
 

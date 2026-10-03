@@ -1,0 +1,14 @@
+# Cloudflare Workers deploy (spectrum.bybrooklyn.dev).
+# Local dev/build/serve are unaffected (Node adapter by default).
+name = "spectrum"
+main = ".svelte-kit/cloudflare/_worker.js"
+compatibility_date = "2026-09-01"
+account_id = "fadae1e49c81e2b14652a2c46f6c6692"
+
+routes = [
+  { pattern = "spectrum.bybrooklyn.dev/*", zone_name = "bybrooklyn.dev" }
+]
+
+[assets]
+directory = ".svelte-kit/cloudflare"
+binding = "ASSETS"

@@ -19,6 +19,14 @@ no accounts, no tracking, no cookies.
     bun scripts/smoke.ts http://localhost:3000       # smoke a running server
     SMOKE_GZIP=1 bun scripts/smoke.ts http://localhost:3000  # incl. gzip check
 
+## Deploy (Cloudflare Workers → spectrum.bybrooklyn.dev)
+
+    just deploy   # ADAPTER=cloudflare build + wrangler deploy
+
+Every push to `main` deploys via GitHub Actions (needs a
+`CLOUDFLARE_API_TOKEN` repo secret). Compression, caching, and edge
+come from Cloudflare; `server.ts` is local-only.
+
 ## Share links
 
 Short base62 codes like `/0YDLrRF` (11 sliders packed 0–9, `0` = unset).
