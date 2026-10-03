@@ -46,5 +46,5 @@
       </a>
     </li>
   </ul>
-  <p>© {year} bybrooklyn — {t('footer.rights')}</p>
+  <p>© {year} bybrooklyn (is gay :3)</p>
 </footer>

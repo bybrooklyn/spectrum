@@ -74,13 +74,3 @@ export function applySfw(valuesById: AxisValues, sfw: boolean): AxisValues {
   for (const id of nsfwAxisIds) out[id] = UNSET_VALUE;
   return out;
 }
-
-export function valuesArrayToMap(valuesArray: Array<{ axis: string; value: number }>): AxisValues {
-  const out: AxisValues = {};
-  for (const { axis, value } of valuesArray) out[axis] = value;
-  return out;
-}
-
-export function valuesMapToArray(valuesMap: AxisValues): Array<{ axis: string; value: number }> {
-  return axisIds.map((id) => ({ axis: id, value: valuesMap[id] ?? UNSET_VALUE }));
-}

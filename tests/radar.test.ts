@@ -6,6 +6,7 @@ import {
   vertexPoint,
   smoothPath,
   SAG_TENSION,
+  lerpVertices,
   formatVertexValue
 } from '../src/lib/radar.js';
 import { axisIds } from '../src/lib/config.js';
@@ -128,6 +129,42 @@ describe('formatVertexValue', () => {
     expect(formatVertexValue(7)).toBe('7');
     expect(formatVertexValue(6.5)).toBe('6.5');
     expect(formatVertexValue(7.666)).toBe('7.7');
+  });
+});
+
+describe('lerpVertices', () => {
+  const from = computeVertices(all(3));
+  const to = computeVertices(all(7));
+
+  test('t >= 1 adopts the target exactly', () => {
+    expect(lerpVertices(from, to, 1)).toEqual(to);
+    expect(lerpVertices(from, to, 2)).toEqual(to);
+  });
+
+  test('t = 0 keeps the start values', () => {
+    const mid = lerpVertices(from, to, 0);
+    for (const v of mid) expect(v.value).toBe(3);
+  });
+
+  test('midpoints ease toward the target', () => {
+    // easeOutCubic at t=0.5 -> 0.875
+    const mid = lerpVertices(from, to, 0.5);
+    for (const v of mid) {
+      expect(v.value).toBeCloseTo(3 + (7 - 3) * 0.875, 5);
+      expect(v.unset).toBe(false);
+    }
+  });
+
+  test('unset endpoints count as 0 and flags settle at t = 1', () => {
+    const zeros = computeVertices(all(0));
+    const growing = lerpVertices(zeros, to, 0.5);
+    for (const v of growing) {
+      expect(v.value).toBeGreaterThan(0);
+      expect(v.value).toBeLessThan(7);
+    }
+    expect(lerpVertices(zeros, to, 1)).toEqual(to);
+    const shrinking = lerpVertices(to, zeros, 1);
+    for (const v of shrinking) expect(v.unset).toBe(true);
   });
 });
 

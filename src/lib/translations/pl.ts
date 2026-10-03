@@ -9,6 +9,8 @@ export default {
   generate: 'Udostępnij',
   generateHelper: '(przesuń suwaki, aby wybrać wartości 1–9; ✕ czyści oś.)',
   mine: 'Moje Spektrum Płci i Seksualności',
+  skip: 'Przejdź do treści',
+  menu: 'Menu',
   translation: {
     attribution: 'Polskie tłumaczenie:',
     name: 'Avis Drożniak',
@@ -96,8 +98,6 @@ export default {
     }
   },
   share: {
-    facebook: 'Udostępnij na Facebooku',
-    x: 'Udostępnij na X',
     text: 'Oto moje Spektrum Płci i Seksualności. A jakie jest twoje?',
     copy: 'Skopiuj do schowka'
   },

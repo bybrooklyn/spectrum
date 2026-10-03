@@ -1,9 +1,7 @@
 <script lang="ts">
   import Slider from '$lib/components/Slider.svelte';
-  import RadarChart from '$lib/components/RadarChart.svelte';
-  import { axes } from '$lib/config.js';
-  import { applySfw } from '$lib/share.js';
-  import { translateFor } from '$lib/locale.js';
+  import { axes, MIN_VALUE, MAX_VALUE } from '$lib/config.js';
+  import { translateFor, axisValueText } from '$lib/locale.js';
   import { locale } from '$lib/locale.js';
   import type { PageData } from './$types';
 
@@ -11,7 +9,6 @@
 
   $: t = (key: string) => translateFor($locale, key);
   $: valuesArray = axes.map(({ id }) => ({ axis: id, value: data.values[id] ?? 0 }));
-  $: effectiveValues = applySfw(data.values, data.sfw);
   $: makeYoursHref = $locale === 'en' ? '/' : `/?l=${$locale}`;
 </script>
 
@@ -24,7 +21,7 @@
   <meta name="twitter:description" content={t('share.text')} />
 </svelte:head>
 
-<h2 class="title">{t('mine')}</h2>
+<h1 class="title">{t('mine')}</h1>
 
 {#if data.sfw}
   <p class="muted notice" role="note">{t('sfw.hiddenNotice')}</p>
@@ -34,7 +31,14 @@
   {#each valuesArray as { axis, value } (axis)}
     <li>
       <h3>{t(`axes.${axis}.label`)}</h3>
-      <Slider min={1} max={9} value={value} disabled label={t(`axes.${axis}.label`)} />
+      <Slider
+        min={MIN_VALUE}
+        max={MAX_VALUE}
+        value={value}
+        disabled
+        label={t(`axes.${axis}.label`)}
+        valuetext={axisValueText(t, axis, value)}
+      />
       <div class="scale" aria-hidden="true">
         <span>{t(`axes.${axis}.farLeft`)}</span>
         <span class="mid">{t(`axes.${axis}.middle`)}</span>
@@ -43,10 +47,6 @@
     </li>
   {/each}
 </ul>
-
-<section class="card chart-card" aria-label={t('radar.title')}>
-  <RadarChart values={effectiveValues} {t} />
-</section>
 
 <div class="jumbotron">
   <a class="btn big" href={makeYoursHref}> 💬 {t('generate')} </a>
@@ -62,9 +62,6 @@
   .notice {
     text-align: center;
   }
-  .chart-card {
-    margin: 1rem 0;
-  }
   .axes {
     list-style: none;
     margin: 0;
@@ -77,8 +74,8 @@
     margin: 0 0 0.25rem;
   }
   .scale {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     font-size: 0.85rem;
     color: var(--muted);
   }

@@ -1,4 +1,4 @@
-import { derived, writable, type Writable, type Readable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 import type { Translation, TranslateFn } from './locale-types.js';
 import en from './translations/en.js';
 import pl from './translations/pl.js';
@@ -23,8 +23,22 @@ export function translateFor(loc: string, key: string): string {
   return lookup(locales[loc] ?? {}, key) || lookup(en, key) || '';
 }
 
-export const t: Readable<TranslateFn> = derived(locale, ($locale) => (key: string) => translateFor($locale, key));
+/** Clean a raw `?l=` value: known locales pass, anything else becomes 'en'. */
+export function normalizeLocale(raw: string | null | undefined): string {
+  const loc = (raw ?? '').trim().toLowerCase();
+  return locales[loc] !== undefined ? loc : 'en';
+}
 
 export function isRtl(loc: string): boolean {
   return Boolean(locales[loc]?.rtl);
+}
+
+/** Human words for a slider value: anchor label, or unset. */
+export function axisValueText(t: TranslateFn, id: string, value: number): string {
+  if (value === 0) return t('scale.unset');
+  if (value <= 2) return t(`axes.${id}.farLeft`);
+  if (value <= 4) return t(`axes.${id}.left`);
+  if (value === 5) return t(`axes.${id}.middle`);
+  if (value <= 7) return t(`axes.${id}.right`);
+  return t(`axes.${id}.farRight`);
 }

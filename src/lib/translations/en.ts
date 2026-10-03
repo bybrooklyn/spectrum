@@ -8,6 +8,8 @@ export default {
   generate: 'Share yours',
   generateHelper: '(move the sliders to select values, 1–9; ✕ clears an axis)',
   mine: 'My Gender & Sexuality Spectrum',
+  skip: 'Skip to content',
+  menu: 'Menu',
   axes: {
     genderIdentity: {
       label: 'Gender identity',
@@ -117,22 +119,13 @@ export default {
       kink: { label: 'Kink' }
     }
   },
+  // Kept for legacy ?sfw=1 result links; there is no SFW toggle in the UI.
   sfw: {
-    label: 'SFW mode',
-    description: 'Hide NSFW axes',
-    on: 'NSFW axes hidden',
-    off: 'Show all axes',
-    hiddenNotice: 'NSFW axes are hidden in SFW mode and shared as unset.',
-    hiddenCount: 'hidden'
+    hiddenNotice: 'NSFW axes are hidden in SFW mode and shared as unset.'
   },
   share: {
     copy: 'Copy to clipboard',
     copied: 'Copied!',
-    native: 'Share…',
-    mastodon: 'Share on Mastodon',
-    bluesky: 'Share on Bluesky',
-    x: 'Share on X',
-    facebook: 'Share on Facebook',
     text: "Here's my Gender & Sexuality Spectrum. What's yours?"
   },
   footer: {

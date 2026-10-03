@@ -82,6 +82,22 @@ export function formatVertexValue(value: number): string {
   return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
 }
 
+/**
+ * Interpolate between two vertex snapshots (chart morphing).
+ * Unset endpoints count as 0 so shapes grow/shrink through the center;
+ * at t >= 1 the target snapshot is adopted exactly (including unset flags).
+ */
+export function lerpVertices(from: Vertex[], to: Vertex[], t: number): Vertex[] {
+  if (t >= 1) return to.map((tv) => ({ ...tv }));
+  const eased = 1 - Math.pow(1 - Math.min(Math.max(t, 0), 1), 3);
+  return to.map((tv, i) => {
+    const fv = from[i];
+    const a = fv && !fv.unset ? fv.value : 0;
+    const b = tv.unset ? 0 : tv.value;
+    return { ...tv, value: a + (b - a) * eased, unset: a === 0 && b === 0 };
+  });
+}
+
 const fmt = (n: number): string => (Math.round(n * 10) / 10).toString();
 
 /**

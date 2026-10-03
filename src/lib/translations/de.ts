@@ -8,6 +8,8 @@ export default {
   generate: 'Teile deins',
   generateHelper: '(Regler verschieben, um Werte 1–9 zu wählen; ✕ setzt zurück)',
   mine: 'Mein Geschlechtliches & Sexuelles Spektrum',
+  skip: 'Zum Inhalt springen',
+  menu: 'Menü',
   translation: {
     attribution: 'Übersetzt von',
     name: 'Feuerhamster',
@@ -95,8 +97,6 @@ export default {
     }
   },
   share: {
-    facebook: 'Teile auf Facebook',
-    x: 'Teile auf X',
     text: 'Hier ist mein Geschlecht & Spektrum. Was ist deins?',
     copy: 'In die Zwischenablage kopieren'
   },

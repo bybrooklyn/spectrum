@@ -10,6 +10,9 @@ build: install
 preview: build
 	bun run preview
 
+serve: build
+	bun server.ts
+
 check: install
 	bun run check
 

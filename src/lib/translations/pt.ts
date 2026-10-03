@@ -8,6 +8,8 @@ export default {
   generate: 'Compartilhe o seu',
   generateHelper: '(mova os sliders para selecionar valores)',
   mine: 'Meu Espectro de Gênero e Sexualidade',
+  skip: 'Pular para o conteúdo',
+  menu: 'Menu',
   translation: {
     attribution: 'Traduzido por',
     name: 'Diogo de Souza',
@@ -95,8 +97,6 @@ export default {
     }
   },
   share: {
-    facebook: 'Compartilhe no Facebook',
-    x: 'Compartilhe no X',
     text: 'Este é o meu Espectro de Gênero e Sexualidade. Qual o seu?',
     copy: 'Copiar para a área de transferência'
   },

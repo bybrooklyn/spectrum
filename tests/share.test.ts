@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { encodeValues, decodeCode, applySfw, CODE_LENGTH } from '../src/lib/share.js';
+import { encodeValues, decodeCode, applySfw, convertBase, CODE_LENGTH } from '../src/lib/share.js';
 import { axisIds } from '../src/lib/config.js';
 
 describe('share encoding (vanilla base62 scheme)', () => {
@@ -52,5 +52,24 @@ describe('share encoding (vanilla base62 scheme)', () => {
     expect(decoded.sexualOrientation).toBe(0);
     expect(decoded.kinkRole).toBe(0);
     expect(decoded.sexualExploration).toBe(0);
+  });
+
+  test('overflow codes that decode past 11 digits are rejected', () => {
+    // 'zzzzzzz' is valid base62 but decodes beyond the 11-digit space.
+    expect(convertBase('zzzzzzz', 62, 10).length).toBeGreaterThan(11);
+    expect(() => decodeCode('zzzzzzz')).toThrow();
+  });
+
+  test('convertBase rejects invalid digits', () => {
+    expect(() => convertBase('!', 10, 62)).toThrow();
+    expect(() => convertBase('abc', 10, 62)).toThrow();
+  });
+
+  test('missing keys encode as unset, applySfw(false) copies', () => {
+    expect(decodeCode(encodeValues({}))).toEqual(Object.fromEntries(axisIds.map((id) => [id, 0])));
+    const values = Object.fromEntries(axisIds.map((id) => [id, 4]));
+    const out = applySfw(values, false);
+    expect(out).toEqual(values);
+    expect(out).not.toBe(values);
   });
 });

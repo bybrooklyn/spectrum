@@ -9,6 +9,8 @@ export default {
   generate: 'المشاركة',
   generateHelper: '(حرّك أشرطة التمرير لاختيار القيم)',
   mine: 'الطيف الجنسي الخاص بي',
+  skip: 'تخطي إلى المحتوى',
+  menu: 'القائمة',
   translation: {
     attribution: 'مُترجَمة من قِبَل',
     name: 'متطوع'
@@ -95,8 +97,6 @@ export default {
     }
   },
   share: {
-    facebook: 'المشاركة على الفيسبوك',
-    x: 'المشاركة على X',
     text: 'هذا الطيف الجنسي الخاص بي. ماذا عنك؟',
     copy: 'نسخ الرابط'
   },

@@ -29,6 +29,8 @@ export interface Translation {
   generate: string;
   generateHelper: string;
   mine: string;
+  skip: string;
+  menu: string;
   translation?: TranslationCredit;
   rtl?: boolean;
   axes: Partial<Record<string, AxisStrings>>;
@@ -41,22 +43,13 @@ export interface Translation {
     hide?: string;
     vertices?: Partial<Record<string, RadarVertexStrings>>;
   };
+  // Only hiddenNotice is rendered (legacy ?sfw=1 links); no SFW UI exists.
   sfw?: {
-    label?: string;
-    description?: string;
-    on?: string;
-    off?: string;
     hiddenNotice?: string;
-    hiddenCount?: string;
   };
   share?: {
     copy?: string;
     copied?: string;
-    native?: string;
-    mastodon?: string;
-    bluesky?: string;
-    x?: string;
-    facebook?: string;
     text?: string;
   };
   disclaimer?: {

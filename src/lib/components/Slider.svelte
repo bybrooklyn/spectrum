@@ -4,6 +4,7 @@
   export let max: number = 9;
   export let disabled: boolean = false;
   export let label: string = 'value';
+  export let valuetext: string = '';
 
   function activate(): void {
     if (value === 0) value = 5;
@@ -36,6 +37,7 @@
   {disabled}
   class:empty={value === 0}
   aria-label={label}
+  aria-valuetext={valuetext || undefined}
   on:pointerdown={activate}
   on:mousedown={activate}
   on:keydown={(e) => {

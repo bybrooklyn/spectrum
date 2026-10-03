@@ -1,32 +1,29 @@
-# Sexuality Spectrum v2
+# Spectrum
+
+Where are you on the Gender & Sexuality Spectrum?
 
 - [Repository](https://github.com/bybrooklyn/spectrum)
 
-SvelteKit + Vite + Bun port with 11 spectrum axes, 5-point labels,
-and a hexagon overview chart.
+Move the sliders, share the link. All state lives in the URL —
+no accounts, no tracking, no cookies.
 
 ## Local copy
 
-    make install
-    make run      # bun run dev (http://localhost:5173)
+    just install   # bun install
+    just run       # dev server
+    just test      # unit tests
+    just check     # typecheck
+    just build     # production build
+    just serve     # production server with gzip
+    just preview   # vite preview
+    bun scripts/smoke.ts http://localhost:3000       # smoke a running server
+    SMOKE_GZIP=1 bun scripts/smoke.ts http://localhost:3000  # incl. gzip check
 
-    make build    # bun run build
-    make preview  # bun run preview (PORT=3000 bun ./build/index.js)
-    make test     # bun test
-    make check    # svelte-check
-    make smoke    # bun scripts/smoke.ts (against a running server)
+## Share links
 
-Share-code format is v2 and breaking: short base62 codes like `/0YDLrRF`
-(11 axis values packed the same way as the original site's 4-char codes,
-`0` = unset). Old v1 4-char codes 404 by design.
-
-The locale param is omitted when it carries no information: English shares
-are bare `/{code}`, other locales append `?l=pl` etc.
-
-Legacy `?sfw=1` result links are still honored (NSFW axes render as unset),
-but there is no SFW toggle in the UI anymore.
-
-All slider state lives in the URL. No accounts, no tracking, no cookies.
+Short base62 codes like `/0YDLrRF` (11 sliders packed 0–9, `0` = unset).
+English links carry no locale param; other locales append `?l=pl` etc.
+Unknown locales fall back to English. Old 4-char codes 404.
 
 ## Copyright
 

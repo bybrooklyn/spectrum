@@ -1,13 +1,12 @@
 <script lang="ts">
   import Slider from '$lib/components/Slider.svelte';
-  import RadarChart from '$lib/components/RadarChart.svelte';
-  import { axes, DEFAULT_VALUE, UNSET_VALUE } from '$lib/config.js';
+  import { axes, DEFAULT_VALUE, MIN_VALUE, MAX_VALUE, UNSET_VALUE } from '$lib/config.js';
   import type { AxisValues } from '$lib/config.js';
   import { encodeValues } from '$lib/share.js';
-  import { locale, translateFor } from '$lib/locale.js';
+  import { locale, translateFor, axisValueText } from '$lib/locale.js';
   import { page } from '$app/stores';
   import { browser } from '$app/environment';
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
   $: t = (key: string) => translateFor($locale, key);
 
@@ -15,31 +14,53 @@
   for (const { id } of axes) values[id] = DEFAULT_VALUE;
 
   let copied = false;
-  let showChart = false;
-  let chartSection: HTMLElement | undefined;
+  let copyTimer = 0;
+  let saveTimer = 0;
 
-  onMount(() => {
+  /** Stored slider state carries a version so old shapes never load. */
+  const STORAGE_VERSION = 1;
+
+  function readStoredValues(): void {
     try {
-      const storedValues = localStorage.getItem('spectrum-values');
-      if (storedValues) {
-        const parsed: unknown = JSON.parse(storedValues);
-        if (typeof parsed === 'object' && parsed !== null) {
-          const record = parsed as Record<string, unknown>;
-          for (const { id } of axes) {
-            const v = record[id];
-            if (Number.isInteger(v) && (v as number) >= 0 && (v as number) <= 9) {
-              values[id] = v as number;
-            }
-          }
+      const raw = localStorage.getItem('spectrum-values');
+      if (!raw) return;
+      const parsed: unknown = JSON.parse(raw);
+      if (typeof parsed !== 'object' || parsed === null) return;
+      const record = parsed as { version?: unknown; values?: unknown };
+      if (record.version !== STORAGE_VERSION || typeof record.values !== 'object' || record.values === null) return;
+      const stored = record.values as Record<string, unknown>;
+      for (const { id } of axes) {
+        const v = stored[id];
+        if (Number.isInteger(v) && (v as number) >= 0 && (v as number) <= 9) {
+          values[id] = v as number;
         }
       }
     } catch {}
+  }
+
+  function saveValuesSoon(): void {
+    if (!browser) return;
+    window.clearTimeout(saveTimer);
+    saveTimer = window.setTimeout(() => {
+      try {
+        localStorage.setItem('spectrum-values', JSON.stringify({ version: STORAGE_VERSION, values }));
+      } catch {}
+    }, 300);
+  }
+
+  onMount(() => {
+    readStoredValues();
+    return () => {
+      window.clearTimeout(saveTimer);
+      window.clearTimeout(copyTimer);
+    };
   });
 
-  $: if (browser) {
-    try {
-      localStorage.setItem('spectrum-values', JSON.stringify(values));
-    } catch {}
+  $: {
+    // Persist slider state, debounced: slider drags fire many updates.
+    // Referencing `values` here re-runs this block on every change.
+    void values;
+    saveValuesSoon();
   }
 
   $: code = encodeValues(values);
@@ -49,35 +70,32 @@
   $: shareParams = $locale === 'en' ? '' : `?l=${$locale}`;
   $: shareUrl = browser ? `${$page.url.origin}/${code}${shareParams}` : `/${code}`;
 
-  $: shareText = t('share.text');
-
   async function copy(): Promise<void> {
+    let ok = false;
     try {
-      await navigator.clipboard.writeText(shareUrl);
-    } catch {
-      const el = document.getElementById('share-url') as HTMLInputElement | null;
-      el?.select();
-      document.execCommand?.('copy');
-    }
-    copied = true;
-    setTimeout(() => (copied = false), 2000);
-  }
-
-  async function nativeShare(): Promise<void> {
-    try {
-      await navigator.share({ title: t('title'), text: shareText, url: shareUrl });
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
+        ok = true;
+      }
     } catch {}
+    if (!ok) {
+      try {
+        const el = document.getElementById('share-url') as HTMLInputElement | null;
+        el?.select();
+        ok = document.execCommand('copy');
+      } catch {
+        ok = false;
+      }
+    }
+    // Report success honestly: no checkmark on failure.
+    if (!ok) return;
+    copied = true;
+    window.clearTimeout(copyTimer);
+    copyTimer = window.setTimeout(() => (copied = false), 2000);
   }
 
   function clearAxis(id: string): void {
     values[id] = UNSET_VALUE;
-  }
-
-  function toggleChart(): void {
-    showChart = !showChart;
-    if (showChart && browser) {
-      requestAnimationFrame(() => chartSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
-    }
   }
 </script>
 
@@ -89,11 +107,11 @@
   <meta name="twitter:description" content={t('description')} />
 </svelte:head>
 
-<h2 class="hero">
+<h1 class="hero">
   {t('description')}
   <br />
   <small class="muted">{t('generateHelper')}</small>
-</h2>
+</h1>
 
 <ul class="axes">
   {#each axes as { id } (id)}
@@ -109,7 +127,13 @@
           >
         {/if}
       </h3>
-      <Slider min={1} max={9} bind:value={values[id]} label={t(`axes.${id}.label`)} />
+      <Slider
+        min={MIN_VALUE}
+        max={MAX_VALUE}
+        bind:value={values[id]}
+        label={t(`axes.${id}.label`)}
+        valuetext={axisValueText(t, id, values[id])}
+      />
       <div class="scale" aria-hidden="true">
         <span>{t(`axes.${id}.farLeft`)}</span>
         <span class="mid">{t(`axes.${id}.middle`)}</span>
@@ -123,53 +147,21 @@
   <label class="muted small" for="share-url">{t('generate')}</label>
   <div class="input-group">
     <input readonly value={shareUrl} id="share-url" on:click={(e) => e.currentTarget.select()} />
-    <button type="button" title={t('share.copy')} on:click={copy}>
-      {copied ? t('share.copied') : '📋'}
-    </button>
-  </div>
-
-  <div class="row share-row">
-    {#if typeof navigator !== 'undefined' && 'share' in navigator}
-      <button type="button" class="flex-1" on:click={nativeShare}>{t('share.native')}</button>
-    {/if}
-    <a
-      class="btn btn-secondary flex-1"
-      target="_blank"
-      rel="noopener"
-      href={`https://mastodonshare.com/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`}
-    >
-      {t('share.mastodon')}
-    </a>
-    <a
-      class="btn btn-secondary flex-1"
-      target="_blank"
-      rel="noopener"
-      href={`https://bsky.app/intent/compose?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`}
-    >
-      {t('share.bluesky')}
-    </a>
-    <a
-      class="btn btn-secondary flex-1"
-      target="_blank"
-      rel="noopener"
-      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
-    >
-      {t('share.x')}
-    </a>
+    {#key copied}
+      <button
+        type="button"
+        class="copy-btn"
+        class:pop={copied}
+        title={t('share.copy')}
+        aria-label={copied ? t('share.copied') : t('share.copy')}
+        on:click={copy}
+      >
+        <span aria-hidden="true">{copied ? '✓' : '📋'}</span>
+        <span class="sr-only" role="status">{copied ? t('share.copied') : ''}</span>
+      </button>
+    {/key}
   </div>
 </div>
-
-<div class="reveal">
-  <button type="button" on:click={toggleChart} aria-expanded={showChart}>
-    {showChart ? t('radar.hide') : t('radar.show')}
-  </button>
-</div>
-
-{#if showChart}
-  <section class="card chart-card reveal-in" aria-label={t('radar.title')} bind:this={chartSection}>
-    <RadarChart values={values} {t} />
-  </section>
-{/if}
 
 <style>
   .hero {
@@ -182,23 +174,24 @@
     font-size: 1rem;
     font-weight: 400;
   }
-  .chart-card {
-    margin-bottom: 1.5rem;
+  .copy-btn.pop {
+    animation: copy-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .reveal {
-    text-align: center;
-    margin: 2.5rem auto 0;
-  }
-  .reveal-in {
-    animation: reveal-in 0.35s ease;
-  }
-  @keyframes reveal-in {
-    from {
-      opacity: 0;
-      transform: scale(0.96) translateY(8px);
+  @keyframes copy-pop {
+    0% {
+      transform: scale(1);
     }
-    to {
-      opacity: 1;
+    40% {
+      transform: scale(1.12);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .copy-btn.pop {
+      animation: none;
+      transition: none;
       transform: none;
     }
   }
@@ -228,12 +221,14 @@
     border: none;
     box-shadow: none;
     color: var(--muted);
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
     font-size: 1rem;
   }
   .scale {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 0.5rem;
     font-size: 0.85rem;
     color: var(--muted);
@@ -258,12 +253,6 @@
     border-start-start-radius: 0;
     border-end-start-radius: 0;
     white-space: nowrap;
-  }
-  .share-row {
-    display: flex;
-    gap: 0.5rem;
-  }
-  .flex-1 {
-    flex: 1 1 auto;
+    min-width: 3rem;
   }
 </style>

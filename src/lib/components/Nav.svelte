@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { locale, locales, isRtl } from '$lib/locale.js';
+  import { locale, locales } from '$lib/locale.js';
   import { page } from '$app/stores';
   import type { TranslateFn } from '$lib/locale-types.js';
 
   export let t: TranslateFn;
-
   let menuShown = false;
 
   function hrefWithLocale(loc: string): string {
@@ -12,8 +11,6 @@
     url.searchParams.set('l', loc);
     return url.pathname + url.search;
   }
-
-  $: rtl = isRtl($locale);
 </script>
 
 <style>
@@ -56,7 +53,9 @@
     padding: 0;
   }
   .locales a {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
     padding: 0.4rem 0.6rem;
     border-radius: 0.5rem;
     text-decoration: none;
@@ -65,10 +64,16 @@
     color: var(--muted);
     border: 1px solid transparent;
   }
-  .locales a[aria-current='true'] {
-    color: var(--primary);
+  .locales a[aria-current='page'] {
+    color: var(--primary-dark);
     border-color: var(--border);
     background: var(--primary-soft);
+  }
+  @media (prefers-color-scheme: dark) {
+    /* Dark pink fails on the dark tint; use a light pink instead. */
+    .locales a[aria-current='page'] {
+      color: #f58ac4;
+    }
   }
   .menu-btn {
     display: none;
@@ -82,6 +87,8 @@
     }
     .menu-btn {
       display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
       padding: 0.4rem 0.7rem;
     }
     .locales {
@@ -110,16 +117,18 @@
       class="menu-btn btn-secondary btn"
       type="button"
       aria-expanded={menuShown}
+      aria-controls="locale-menu"
+      aria-label={t('menu')}
       on:click={() => (menuShown = !menuShown)}
     >
-      ☰
+      <span aria-hidden="true">☰</span>
     </button>
-    <ul class="locales" class:open={menuShown}>
+    <ul class="locales" id="locale-menu" class:open={menuShown}>
       {#each Object.keys(locales) as loc}
         <li>
           <a
             href={hrefWithLocale(loc)}
-            aria-current={loc === $locale ? 'true' : undefined}
+            aria-current={loc === $locale ? 'page' : undefined}
             on:click={() => (menuShown = false)}
           >
             {loc.toUpperCase()}

@@ -15,7 +15,8 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "test": "bun test",
-    "smoke": "bun scripts/smoke.ts"
+    "smoke": "bun scripts/smoke.ts",
+    "serve": "bun server.ts"
   },
   "dependencies": {},
   "devDependencies": {

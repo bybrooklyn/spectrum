@@ -12,7 +12,8 @@ async function check(name, path, wantStatus, wantBody) {
   try {
     res = await fetch(url);
   } catch (e) {
-    console.error(`FAIL ${name}: fetch error for ${url}: ${e.message}`);
+    const message = e instanceof Error ? e.message : String(e);
+    console.error(`FAIL ${name}: fetch error for ${url}: ${message}`);
     failures++;
     return;
   }
@@ -30,17 +31,44 @@ async function check(name, path, wantStatus, wantBody) {
   console.log(`ok ${name}: ${res.status} ${path}`);
 }
 
+async function checkHeader(name: string, path: string, header: string, want: RegExp) {
+  const url = base + path;
+  let res;
+  try {
+    res = await fetch(url, { headers: { 'Accept-Encoding': 'gzip' } });
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    console.error(`FAIL ${name}: fetch error for ${url}: ${message}`);
+    failures++;
+    return;
+  }
+  await res.arrayBuffer();
+  const value = res.headers.get(header) ?? '';
+  if (res.status !== 200 || !want.test(value)) {
+    console.error(`FAIL ${name}: ${url} ${header}=${JSON.stringify(value)} (want ${want})`);
+    failures++;
+    return;
+  }
+  console.log(`ok ${name}: ${header}=${value}`);
+}
+
 await check('root', '/', 200, 'Spectrum');
-await check('editor show button', '/', 200, 'Show overview');
-await check('result', '/0YDLrRF', 200, 'Spectrum');
-await check('result radar', '/0YDLrRF', 200, 'radar-title');
+await check('result', '/0YDLrRF', 200, 'My Gender');
 await check('privacy gone', '/privacy', 404);
 await check('locale pl', '/?l=pl', 200, 'Spektrum');
+await check('locale ar (rtl)', '/?l=ar', 200, 'الطيف');
+await check('invalid locale falls back', '/?l=xx', 200, 'Spectrum');
 await check('sfw result', '/0YDLrRF?sfw=1', 200);
 await check('old v1 code 404s', '/wbWN', 404);
 await check('old short code 404s', '/1234', 404);
 await check('bad code 404s', '/abcdefghijk', 404);
 await check('static favicon', '/favicon.png', 200);
+await check('manifest', '/manifest.json', 200, 'Spectrum');
+// Only the custom gzip server (bun server.ts) compresses; vite dev and
+// adapter-node preview do not. Opt in with SMOKE_GZIP=1.
+if (process.env.SMOKE_GZIP === '1') {
+  await checkHeader('gzip html', '/', 'content-encoding', /gzip/);
+}
 
 if (failures > 0) {
   console.error(`${failures} smoke check(s) failed`);

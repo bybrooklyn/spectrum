@@ -1,4 +1,5 @@
 import { decodeCode } from '$lib/share.js';
+import { normalizeLocale } from '$lib/locale.js';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
@@ -8,7 +9,7 @@ export const load: PageLoad = async ({ params, url }) => {
     return {
       code: params.code,
       values,
-      locale: url.searchParams.get('l') || 'en',
+      locale: normalizeLocale(url.searchParams.get('l')),
       sfw: url.searchParams.get('sfw') === '1'
     };
   } catch {

@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { VERTEX_GROUPS, RINGS, computeVertices, vertexPoint, smoothPath, formatVertexValue } from '$lib/radar.js';
+  import { VERTEX_GROUPS, RINGS, computeVertices, vertexPoint, smoothPath, lerpVertices, formatVertexValue } from '$lib/radar.js';
   import type { Vertex } from '$lib/radar.js';
   import type { TranslateFn } from '$lib/locale-types.js';
+  import { browser } from '$app/environment';
+  import { onDestroy } from 'svelte';
 
   /** Axis values 0-9, ALREADY passed through applySfw() by the caller. */
   export let values: Record<string, number> = {};
@@ -13,8 +15,41 @@
   const CY = 150;
   const R = 100;
   const TOTAL = VERTEX_GROUPS.length;
+  const MORPH_MS = 220;
 
-  $: vertices = computeVertices(values);
+  // Displayed vertices tween toward the target on every change so the blob
+  // morphs instead of jumping. First render (incl. SSR) snaps instantly.
+  let shown: Vertex[] = [];
+  let initialized = false;
+  let rafId = 0;
+
+  function reduceMotion(): boolean {
+    return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function morphTo(next: Vertex[]): void {
+    if (!initialized || !browser || reduceMotion()) {
+      initialized = true;
+      shown = next;
+      return;
+    }
+    const from = shown;
+    const start = performance.now();
+    const step = (now: number): void => {
+      const t = Math.min((now - start) / MORPH_MS, 1);
+      shown = lerpVertices(from, next, t);
+      if (t < 1) rafId = requestAnimationFrame(step);
+    };
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(step);
+  }
+
+  onDestroy(() => {
+    // onDestroy also runs during SSR teardown, where rAF doesn't exist.
+    if (browser) cancelAnimationFrame(rafId);
+  });
+
+  $: morphTo(computeVertices(values));
 
   function ringPoints(ringValue: number): string {
     return VERTEX_GROUPS.map((_, i) => {
@@ -36,7 +71,7 @@
   // Smooth blob through defined vertices only, in order. Unset vertices
   // create visible gaps (never connect through the center).
   $: segments = (() => {
-    const defined = vertices
+    const defined = shown
       .map((v, i) => ({ v, i }))
       .filter(({ v }) => !v.unset);
     if (defined.length < 2) return [];
@@ -65,7 +100,7 @@
   $: titleText = t('radar.title');
   $: descText = t('radar.hint');
   $: emptyText = t('radar.empty');
-  $: allUnset = vertices.every((v) => v.unset);
+  $: allUnset = shown.every((v) => v.unset);
 </script>
 
 <style>
@@ -98,6 +133,19 @@
     fill: var(--primary);
     stroke: var(--surface);
     stroke-width: 1.5;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: dot-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  }
+  @keyframes dot-in {
+    from {
+      opacity: 0;
+      transform: scale(0);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
   .dot-unset {
     fill: transparent;
@@ -138,6 +186,11 @@
       break-inside: avoid;
     }
   }
+  @media (prefers-reduced-motion: reduce) {
+    .dot {
+      animation: none;
+    }
+  }
 </style>
 
 <div class="chart-wrap">
@@ -163,14 +216,14 @@
       <path class="data-shape" d={seg.d} fill={seg.closed ? undefined : 'none'} />
     {/each}
 
-    {#each vertices as vertex, i}
+    {#each shown as vertex, i}
       {@const center = vertexPoint(vertex.unset ? 0 : vertex.value, i, TOTAL, R, CX, CY)}
       {#if vertex.unset}
         <circle class="dot-unset" cx={CX} cy={CY} r="4">
           <title>{t(`radar.vertices.${vertex.key}.label`)}: {t('scale.unset')}</title>
         </circle>
       {:else}
-        <circle class="dot" cx={center.x} cy={center.y} r="4">
+        <circle class="dot" cx={center.x} cy={center.y} r="4" style="animation-delay: {i * 70}ms">
           <title
             >{t(`radar.vertices.${vertex.key}.label`)}: {formatVertexValue(vertex.value)}
             ({vertex.count}/{vertex.members.length})</title
@@ -197,7 +250,7 @@
     <table>
       <caption>{titleText}</caption>
       <tbody>
-        {#each vertices as vertex}
+        {#each shown as vertex}
           <tr>
             <th scope="row">{t(`radar.vertices.${vertex.key}.label`)}</th>
             <td>
