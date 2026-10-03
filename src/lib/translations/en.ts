@@ -4,7 +4,7 @@ export default {
   title: 'Gender & Sexuality Spectrum',
   description: 'Where are you on the Gender & Sexuality Spectrum?',
   keywords:
-    'gender, identity, expression, sexual, orientation, drive, romantic, desire, relationship, male, nonbinary, female, masculine, feminine, straight, bi, pan, gay, asexual, ace, aromantic, romantic, monogamy, polyamory, vanilla, bdsm',
+    'gender, identity, expression, sexual, orientation, drive, romantic, desire, relationship, male, nonbinary, female, masculine, feminine, straight, bi, pan, gay, lesbian, asexual, ace, aromantic, romantic, monogamy, polyamory, vanilla, bdsm',
   generate: 'Share yours',
   generateHelper: '(move the sliders to select values, 1–9; ✕ clears an axis)',
   mine: 'My Gender & Sexuality Spectrum',
@@ -31,17 +31,17 @@ export default {
       label: 'Sexual orientation',
       farLeft: 'Straight',
       left: 'Mostly straight',
-      middle: 'Bisexual',
-      right: 'Gay',
-      farRight: 'Pansexual'
+      middle: 'Bisexual/Pansexual',
+      right: 'Mostly gay/lesbian',
+      farRight: 'Gay/Lesbian'
     },
     romanticOrientation: {
       label: 'Romantic orientation',
       farLeft: 'Heteroromantic',
       left: 'Mostly heteroromantic',
-      middle: 'Biromantic',
-      right: 'Homoromantic',
-      farRight: 'Panromantic'
+      middle: 'Biromantic/Panromantic',
+      right: 'Mostly homoromantic',
+      farRight: 'Homoromantic'
     },
     sexualAttraction: {
       label: 'Sexual attraction',
@@ -144,7 +144,7 @@ export default {
       'Humans are more complex than just a few axes!',
     examples:
       'Yes, us nonbinary folks aren\'t necessarily <em>in between</em> “men” and “women”, ' +
-      'yes, placing bisexuality at the center and pansexuality at the end of a single line is a simplification, etc. etc. etc. ' +
+      'yes, placing bisexuality/pansexuality at the center and gay/lesbian identity at the end of a single line is a simplification, etc. etc. etc. ' +
       "But it's an approximation. " +
       "If you come up with a better one, I'd gladly make an app for it 😉"
   }

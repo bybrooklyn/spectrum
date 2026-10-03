@@ -36,18 +36,18 @@ export default {
       label: 'Orientação Sexual',
       farLeft: 'Heterossexual',
       left: 'Heterossexual',
-      middle: 'Bi',
-      right: 'Gay',
-      farRight: 'Pan'
+      middle: 'Bi/Pan',
+      right: 'Majoritariamente gay',
+      farRight: 'Gay/Lésbica'
     },
     // TODO(i18n): native review of romanticOrientation + pan terms
     romanticOrientation: {
       label: 'Romantic orientation',
       farLeft: 'Heteroromantic',
       left: 'Mostly heteroromantic',
-      middle: 'Biromantic',
-      right: 'Homoromantic',
-      farRight: 'Panromantic'
+      middle: 'Biromantic/Panromantic',
+      right: 'Mostly homoromantic',
+      farRight: 'Homoromantic'
     },
     sexualDrive: {
       label: 'Desejo Sexual',

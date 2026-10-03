@@ -36,18 +36,18 @@ export default {
       label: 'Sexuelle Orientierung',
       farLeft: 'Heterosexuell',
       left: 'Heterosexuell',
-      middle: 'Bi',
-      right: 'Homosexuell',
-      farRight: 'Pansexuell'
+      middle: 'Bi/Pan',
+      right: 'Überwiegend homosexuell',
+      farRight: 'Schwul/Lesbisch'
     },
     // TODO(i18n): native review of romanticOrientation + pan terms
     romanticOrientation: {
       label: 'Romantic orientation',
       farLeft: 'Heteroromantic',
       left: 'Mostly heteroromantic',
-      middle: 'Biromantic',
-      right: 'Homoromantic',
-      farRight: 'Panromantic'
+      middle: 'Biromantic/Panromantic',
+      right: 'Mostly homoromantic',
+      farRight: 'Homoromantic'
     },
     sexualDrive: {
       label: 'Sexualtrieb',
@@ -117,7 +117,7 @@ export default {
       'Menschen sind komplexer als nur ein paar Achsen!',
     examples:
       'Ja, wir nicht-binären Menschen sind nicht unbedingt <em>zwischen</em> "männlich" und "weiblich", ' +
-      'ja, Bisexualität in die Mitte und Pansexualität ans Ende einer einzigen Linie zu setzen ist eine Vereinfachung, etc. etc. etc. ' +
+      'ja, Bisexualität/Pansexualität in die Mitte und schwul/lesbische Identität ans Ende einer einzigen Linie zu setzen ist eine Vereinfachung, etc. etc. etc. ' +
       'Aber es ist eine Annäherung. ' +
       'Wenn du eine bessere Idee hast, würde ich gerne eine App dafür machen 😉'
   }

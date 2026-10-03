@@ -37,18 +37,18 @@ export default {
       label: 'Orientacja seksualna',
       farLeft: 'Hetero',
       left: 'Hetero',
-      middle: 'Bi',
-      right: 'Homo',
-      farRight: 'Pan'
+      middle: 'Bi/Pan',
+      right: 'Przeważnie homo',
+      farRight: 'Gej/Lesbijka'
     },
     // TODO(i18n): native review of romanticOrientation + pan terms
     romanticOrientation: {
       label: 'Romantic orientation',
       farLeft: 'Heteroromantic',
       left: 'Mostly heteroromantic',
-      middle: 'Biromantic',
-      right: 'Homoromantic',
-      farRight: 'Panromantic'
+      middle: 'Biromantic/Panromantic',
+      right: 'Mostly homoromantic',
+      farRight: 'Homoromantic'
     },
     sexualDrive: {
       label: 'Pociąg seksualny',
@@ -118,7 +118,7 @@ export default {
       'Ludzie są bardziej złożeni niż parę osi!',
     examples:
       'Tak, my, osoby niebinarne, niekoniecznie jesteśmy <em>pomiędzy</em> „mężczyzną” a „kobietą”, ' +
-      'tak, ułożenie bi pośrodku, a pan na końcu jednej linii to uproszczenie, itd. ' +
+      'tak, ułożenie bi/pan pośrodku, a gej/lesbijka na końcu jednej linii to uproszczenie, itd. ' +
       'Ale to tylko przybliżenie. ' +
       'Jeżeli pokażesz lepszą metodę, z radością zrobię dla niej aplikację 😉'
   }

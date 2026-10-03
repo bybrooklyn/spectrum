@@ -36,18 +36,18 @@ export default {
       label: 'التوجه الجنسي',
       farLeft: 'محب للجنس الآخر',
       left: 'محب للجنس الآخر',
-      middle: 'ثنائي/ة',
-      right: 'مثلي الجنس',
-      farRight: 'بان'
+      middle: 'ثنائي/بان',
+      right: 'مثلي الجنس غالبًا',
+      farRight: 'مثلي/مثلية الجنس'
     },
     // TODO(i18n): native review of romanticOrientation + bi/pan terms
     romanticOrientation: {
       label: 'Romantic orientation',
       farLeft: 'Heteroromantic',
       left: 'Mostly heteroromantic',
-      middle: 'Biromantic',
-      right: 'Homoromantic',
-      farRight: 'Panromantic'
+      middle: 'Biromantic/Panromantic',
+      right: 'Mostly homoromantic',
+      farRight: 'Homoromantic'
     },
     sexualDrive: {
       label: 'الرغبة الجنسية',
